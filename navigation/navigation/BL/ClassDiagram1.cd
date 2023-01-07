@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="The direction of Ship can be measured at more than one angles.">
+    <Position X="4.573" Y="1.958" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="navigation.BL.ship">
+    <Position X="1.5" Y="1.5" Width="2.5" />
+    <AssociationLine Name="Have" Type="navigation.BL.Angle">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.433" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAACEAEAAAIIACAAAAgAAAAAAAAAACAEAA=</HashCode>
+      <FileName>BL\Class1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Have" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="navigation.BL.Angle">
+    <Position X="7.75" Y="1.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAACEAEABAIAACAAAAAAAAABAAAAAiAEAE=</HashCode>
+      <FileName>BL\Class1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

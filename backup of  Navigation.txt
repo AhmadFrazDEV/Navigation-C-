@@ -1,0 +1,274 @@
+//===================== MAIN =============
+using System;
+using System.Collections.Generic;
+using static System.Console;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using navigation.BL;
+
+namespace navigation
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Angle> addPosition = new List<Angle>();
+
+            int opt;
+            do
+            {
+                header();
+                opt = menu();
+                remove();
+                if (opt == 1) { header();   AddShip(addPosition);           remove(); }
+                if (opt == 2) { header();   ViewShipPosition(addPosition);  remove(); }
+                if (opt == 3) { header();   ShipSerialNumbers(addPosition); remove(); }
+                if (opt == 4) { header();   ChangePosition(addPosition);    remove(); }
+                ReadKey();
+            }
+            while (opt != 5);
+        }
+
+        static void header()
+        {
+            WriteLine("===============> SHIP NAVIGATION <=================");
+            WriteLine();
+        }
+
+        static void remove()
+        {
+            Write("Press any key To Continue......");
+            ReadKey();
+            Clear();
+        }
+
+        static int menu()
+        {
+            WriteLine("1.Add Ships");
+            WriteLine("2.View Ship Position");
+            WriteLine("3.View Ship Serial NUmber");
+            WriteLine("4.Change Ship Position");
+            WriteLine("5.Exist");
+            int opt = int.Parse(ReadLine());
+            return opt;
+        }
+
+        static void AddShip(List<Angle> addPosition)
+        {
+            string shipNo;
+            string latDegree;
+            int latMint;
+            char latDirection;
+            string loDegree;
+            int loMint;
+            char loDirection;
+
+            Write("Enter Ship Number ----- > ");
+            shipNo = ReadLine();
+            WriteLine("Latitude : ");
+            Write("Enter ship Latitude's Degree----->");
+            latDegree = ReadLine();
+            Write("Enter ship LAtitude'Mints------>");
+            latMint = int.Parse(ReadLine());
+            Write("Enter ship Latitude'Direction ------>");
+            latDirection = char.Parse(ReadLine());
+
+            WriteLine("Longitude : ");
+            Write("Enter ship Longitude's Degree----->");
+            loDegree = ReadLine();
+            Write("Enter ship Longitude'Mints------>");
+            loMint = int.Parse(ReadLine());
+            Write("Enter ship Longitude'Direction ------>");
+            loDirection = char.Parse(ReadLine());
+
+            ship addShip = new ship(shipNo , latDegree , latMint , latDirection , loDegree , loMint , loDirection, addPosition);
+
+
+        }
+        static void ViewShipPosition(List<Angle> addPosition)
+        {
+            Angle L = new Angle();
+
+            Write("Enter the ship number to see its Position ----->");
+            string position = ReadLine();
+            int idx = L.checkIndex(position, addPosition);
+            L.showPosition(addPosition, idx);
+        }
+
+        static void ShipSerialNumbers(List<Angle> addPosition)
+        {
+            Angle L = new Angle();
+            Write("Enter Latitude-----> ");
+            string latDegree = ReadLine();
+            int latMint = int.Parse(ReadLine());
+            char latDirection = char.Parse(ReadLine());
+
+            Write("Enter Longnitude-----> ");
+            string loDegree = ReadLine();
+            int loMint = int.Parse(ReadLine());
+            char loDirection = char.Parse(ReadLine());
+
+            int indx = L.checkIndexForSerial(latDegree, latMint, latDirection, loDegree, loMint, loDirection , addPosition);
+            L.displaySerial(addPosition, indx);
+        }
+
+        static void ChangePosition(List<Angle>addPosition)
+        {
+            Angle L = new Angle();
+            ship M = new ship();
+            Write("Enter Serial Number------->");
+             string serial = ReadLine();
+            int idx = L.checkIndex(serial, addPosition);
+            addPosition.RemoveAt(idx);
+
+            addPosition.Insert(idx, Input());
+            M.showList(addPosition);
+        }
+
+        static Angle Input()
+        {
+            Angle L = new Angle();
+            WriteLine("Latitude : ");
+            Write("Enter ship Latitude's Degree----->");
+            L.latDegree = ReadLine();
+            Write("Enter ship LAtitude'Mints------>");
+            L.latMint = int.Parse(ReadLine());
+            Write("Enter ship Latitude'Direction ------>");
+            L.latDirection = char.Parse(ReadLine());
+
+            WriteLine("Longitude : ");
+            Write("Enter ship Longitude's Degree----->");
+            L.loDegree = ReadLine();
+            Write("Enter ship Longitude'Mints------>");
+            L.loMint = int.Parse(ReadLine());
+            Write("Enter ship Longitude'Direction ------>");
+            L.loDirection = char.Parse(ReadLine());
+            return L;
+            
+        }
+    }
+}
+
+
+//========================== CLASS ================
+
+using System;
+using System.Collections.Generic;
+using static System.Console;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace navigation.BL
+{
+    class ship
+    {
+
+
+        public string shipNo;
+        // ------> ship Latitude
+        public string latDegree;
+        public int latMint;
+        public char latDirection;
+        // ------> ship Lognitude
+        public string loDegree;
+        public int loMint;
+        public char loDirection;
+
+
+
+        Angle position = new Angle();
+        public ship(string shipNo, string latDegree, int latMint, char latDirection, string loDegree, int loMint, char loDirection)
+        {
+            this.shipNo = shipNo;
+            this.latDegree = latDegree;
+            this.latMint = latMint;
+            this.loDegree = loDegree;
+            this.loMint = loMint;
+            this.loDirection = loDirection;
+        }
+        public ship(string sgipNo, string latDegree, int latMint, char latDirection, string loDegree, int loMint, char loDirection, List<Angle> addPosition)
+        {
+            position.addAgain(shipNo, latDegree, latMint, latDirection, loDegree, loMint, loDirection);
+            addPosition.Add(position);
+        }
+        public ship()
+        {
+
+        }
+        public void showList(List<Angle> addPosition)
+        {
+            foreach (Angle i in addPosition)
+            {
+                Write("Ship {0} is at :", i.shipNo);
+                WriteLine(i.latDegree + "\u00b0" + i.latMint + "'" + i.latDirection);
+                WriteLine(i.loDegree + "\u00b0" + i.loMint + "'" + i.loDirection);
+
+            }
+        }
+
+
+    }
+
+    class Angle
+    {
+        public string shipNo;
+        // ------> ship Latitude
+        public string latDegree;
+        public int latMint;
+        public char latDirection;
+        // ------> ship Lognitude
+        public string loDegree;
+        public int loMint;
+        public char loDirection;
+
+        public void addAgain(string shipNo, string latDegree, int latMint, char latDirection, string loDegree, int loMint, char loDirection)
+        {
+            this.shipNo = shipNo;
+            this.latDegree = latDegree;
+            this.latMint = latMint;
+            this.loDegree = loDegree;
+            this.loMint = loMint;
+            this.loDirection = loDirection;
+        }
+
+        public int checkIndex(string p1, List<Angle> addPosition)
+        {
+            for (int i = 0; i < addPosition.Count; i++)
+            {
+                if (p1 == addPosition[i].shipNo)
+                {
+                    return i;
+                }
+            }
+            return 0;
+        }
+        public void showPosition(List<Angle> addPosition, int i)
+        {
+
+            WriteLine("Ship is at :");
+            WriteLine("Latitude"+addPosition[i].latDegree + "\u00b0" + addPosition[i].latMint + "'" + addPosition[i].latDirection);
+            WriteLine("Longitude" + addPosition[i].loDegree + "\u00b0" + addPosition[i].loMint + "'" + addPosition[i].loDirection);
+
+
+        }
+
+        public int checkIndexForSerial(string lDe, int lM, char lD, string loDe, int loM, char loD, List<Angle> addPosition)
+        {
+            for (int i = 0; i < addPosition.Count; i++)
+            {
+                if (lDe == addPosition[i].latDegree && lM == addPosition[i].latMint && lD == addPosition[i].latDirection && loDe == addPosition[i].loDegree && loM == addPosition[i].loMint && loD == addPosition[i].loDirection)
+                {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        public void displaySerial(List<Angle> addPosition, int i)
+        {
+            Write("Ships Serial Number is -----> {o}", addPosition[i].shipNo);
+        }
+    }
+}
